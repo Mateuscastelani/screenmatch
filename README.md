@@ -34,4 +34,4 @@ Este projeto explora fundamentos essenciais do ecossistema Java e da engenharia 
 4. Execute o método main na classe principal para iniciar a aplicação no terminal.
 
 👨‍💻 Autor
-Desenvolvido por Mateus
+Desenvolvido por Mateus Castellani
