@@ -1,16 +1,34 @@
 package br.com.minhaempresa.screenmatch.modelos;
 
 
-    public class Titulo {
+import br.com.minhaempresa.screenmatch.excecao.ErroDeConversaoDeAnoException;
+import com.google.gson.annotations.SerializedName;
 
+public class Titulo implements Comparable<Titulo> {
         private String nome;
         private int anoDeLancamento;
-        private int duracaoEmMinutos;
         private boolean incluidoNoPlano;
         private double somaDasAvaliacoes;
         private int totalDeAvaliacoes;
+        private int duracaoEmMinutos;
 
-        public void exibeFichaTecnica() {
+        public Titulo(String nome, int anoDeLancamento) {
+            this.nome = nome;
+            this.anoDeLancamento = anoDeLancamento;
+        }
+
+    public Titulo(TituloOmdb meuTituloOmdb) {
+            this.nome =meuTituloOmdb.title();
+
+            if (meuTituloOmdb.year().length() > 4) {
+                throw new ErroDeConversaoDeAnoException("Não converteu o ano, porque tem mais de 04 caracteres");
+            }
+            this.anoDeLancamento = Integer.valueOf(meuTituloOmdb.year());
+            this.duracaoEmMinutos = Integer.valueOf(meuTituloOmdb.runtime().substring(0,2));
+
+    }
+
+    public void exibeFichaTecnica() {
             System.out.println("Nome do filme: " +nome);
             System.out.println("Ano de lançamento: " +anoDeLancamento);
             System.out.println("Duração em minutos: " +duracaoEmMinutos);
@@ -62,5 +80,16 @@ package br.com.minhaempresa.screenmatch.modelos;
             return this.totalDeAvaliacoes;
         }
 
+        @Override
+        public int compareTo(Titulo outroTitulo) {
+            return this.getNome().compareTo(outroTitulo.getNome());
+        }
+
+    @Override
+    public String toString() {
+        return "nome='" + nome + '\'' +
+                ", anoDeLancamento=" + anoDeLancamento + "," +
+                " duração=" + duracaoEmMinutos;
     }
+}
 

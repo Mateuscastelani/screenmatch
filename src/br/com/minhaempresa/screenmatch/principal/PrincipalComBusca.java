@@ -1,5 +1,6 @@
 package br.com.minhaempresa.screenmatch.principal;
 
+import br.com.minhaempresa.screenmatch.excecao.ErroDeConversaoDeAnoException;
 import br.com.minhaempresa.screenmatch.modelos.Titulo;
 import br.com.minhaempresa.screenmatch.modelos.TituloOmdb;
 import com.google.gson.FieldNamingPolicy;
@@ -19,8 +20,9 @@ public class PrincipalComBusca {
         System.out.println("Digite um filme: ");
         var busca = leitura.nextLine();
 
-        String endereco = "http://www.omdbapi.com/?t=" + busca + "&apikey=ddc92677";
-
+        String endereco = "http://www.omdbapi.com/?t=" + busca.replace(" ", "+") + "&apikey=ddc92677";
+        System.out.println(endereco);
+        try {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(endereco))
@@ -37,13 +39,18 @@ public class PrincipalComBusca {
 
         TituloOmdb meuTituloOmdb = gson.fromJson(json, TituloOmdb.class);
         System.out.println(meuTituloOmdb);
-        try {
+       // try {
             Titulo meuTitulo = new Titulo(meuTituloOmdb);
             System.out.println("Titulo já convertido");
             System.out.println(meuTitulo);
         } catch (NumberFormatException e){
             System.out.println("Aconteceu um erro: " + e.getMessage());
-        } finally {
+        } catch (IllegalArgumentException e){
+            System.out.println("Algum erro de argumento na busca, verifique os dados");
+        } catch (ErroDeConversaoDeAnoException e){
+            System.out.println(e.getMessage());
+        }
+        finally {
             System.out.println("Finalizado com sucesso");
         }
 
